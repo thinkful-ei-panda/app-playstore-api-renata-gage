@@ -11,22 +11,31 @@ app.get('/apps', (req, res) => {
       
   const {sort, genre} = req.query;
 
-    if (sort) {
-        if(!['rating', 'app'].includes(sort)){
-        return res.send('Sort is invalid').status(400);
-    }}
 
-    if (genre) {
-        if(!['Action','Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'].includes(genre)) {
-        return res.send('Genre is invalid').status(400);
-    }}
+  
+  if (sort) {
+      if(!['Rating', 'app'].includes(sort)){
+          return res.send('Sort is invalid').status(400);
+        }}
+        
+        if (genre) {
+            if(!['Action','Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'].includes(genre)) {
+                return res.send('Genre is invalid').status(400);
+            }}
+            
+    let results = appStore;
+    
+    
+    // let results = appStore.filter(app => 
+    //     app.Genres.toLowerCase().includes(genre.toLowerCase()));
 
-    let results = appStore.filter(app => 
-        app.Genres.toLowerCase().includes(genre.toLowerCase()));
+    if (sort) { results.sort((a, b) => { return a[sort] > b[sort] ? 1 : a[sort] < b[sort] ? -1 : 0; }); }
+    
+    if(genre) { results = results.filter(app => app.Genres.toLowerCase().includes(genre.toLowerCase()));}
 
-        if (sort) { results .sort((a, b) => { return a[sort] > b[sort] ? 1 : a[sort] < b[sort] ? -1 : 0; }); }
 
-        res.json(results);
+
+        res.json(results).status(200).send();
 });
 
 
